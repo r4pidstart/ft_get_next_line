@@ -6,7 +6,7 @@
 /*   By: tjo <tjo@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 15:25:55 by tjo               #+#    #+#             */
-/*   Updated: 2022/05/19 15:25:44 by tjo              ###   ########.fr       */
+/*   Updated: 2022/05/31 15:57:09 by tjo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,88 +20,91 @@ static t_list	*find_fd(int fd)
 	ret = lst;
 	while (ret)
 	{
-		if (ret->fd_idx == fd)
+		if (ret->fd == fd)
 			return (ret);
 		ret = ret->next;
 	}
 	ret = (t_list *)malloc(sizeof(t_list));
 	if (!ret)
 		return (0);
-	ret->fd_idx = fd;
+	ret->fd = fd;
 	ret->next = lst;
 	ret->string = (char *)malloc(sizeof(char) * 1);
 	ret->string[0] = '\0';
-	ret->flag = 0;
+	ret->idx = 0;
 	return (lst = ret);
 }
 
-static char	*make_nextstring(t_list *node, char *cur)
+static char	*make_next_string(t_list *node)
 {
 	char	*ret;
 	char	*tmp;
 
-	ret = ft_substr(node->string, 0, cur - node->string + 1);
-	if (!ret)
-		return (0);
-	tmp = ft_substr(node->string, cur - node->string + 1, (size_t)(-1));
-	if (!tmp)
-		return (0);
-	free(node->string);
-	node->string = tmp;
+	if (node->string[node->idx] == '\n')
+	{
+		ret = ft_substr(node->string, 0, node->idx + 1);
+		if (!ret)
+			return (0);
+		tmp = ft_substr(node->string, node->idx + 1, (size_t)(-1));
+		if (!tmp)
+			return (0);
+		free(node->string);
+		node->string = tmp;
+		node->idx = 0;
+	}
+	else
+	{
+		ret = ft_substr(node->string, 0, node->idx);
+		if (!ret)
+			return (0);
+		free(node->string);
+		node->idx = -1;
+	}
 	return (ret);
 }
 
-static char	*read_nextstring(t_list *node, char *cur)
+static char	*find_next_string(t_list *node)
+{
+	if (node->string[node->idx] != '\0')
+	{
+		while (node->string[node->idx + 1] != '\0' \
+		&& node->string[node->idx] != '\n')
+			node->idx++;
+	}
+	return (make_next_string(node));
+}
+
+static char	*read_next_string(t_list *node)
 {
 	char	buf[BUFFER_SIZE];
-	char	*tmp;
-	int		read_byte;
+	int		rd_siz;
+	int		len;
 
-	read_byte = read(node->fd_idx, buf, BUFFER_SIZE - 1);
-	buf[read_byte] = '\0';
-	if (read_byte < 0)
+	rd_siz = read(node->fd, buf, BUFFER_SIZE);
+	if (rd_siz < 0)
 		return (0);
-	if (read_byte == 0)
-	{
-		node->flag = 1;
-		return (make_nextstring(node, cur));
-	}
-	tmp = node->string;
-	node->string = ft_strjoin(node->string, buf);
+	if (rd_siz == 0)
+		return (find_next_string(node));
+	node->string = ft_custom_strjoin(node->string, buf);
 	if (!node->string)
 		return (0);
-	cur = cur - tmp + node->string;
-	free(tmp);
-	while (*cur != '\n' && *cur != '\0')
-		cur++;
-	if (*cur == '\n')
-		return (make_nextstring(node, cur));
-	return (read_nextstring(node, cur));
+	len = node->idx + rd_siz;
+	while (node->idx < len && \
+	node->string[node->idx] != '\0' && node->string[node->idx] != '\n')
+		node->idx++;
+	if (node->idx == len)
+		return (read_next_string(node));
+	return (make_next_string(node));
 }
 
 char	*get_next_line(int fd)
 {
 	t_list	*node;
-	char	*cur;
-	char	*ret;
 
 	node = find_fd(fd);
 	if (!node)
 		return (0);
-	cur = node->string;
-	while (*cur != '\n' && *cur != '\0')
-		cur++;
-	if (*cur == '\n')
-		return (make_nextstring(node, cur));
-	if (node->flag)
-	{
-		if (node->string[0] == '\0')
-			return (0);
-		ret = ft_substr(node->string, 0, (size_t)(-1));
-		if (!ret)
-			return (0);
-		free(node->string);
-		return (ret);
-	}
-	return (read_nextstring(node, cur));
+	if (node->idx < 0)
+		return (0);
+	return (read_next_string(node));
 }

@@ -6,7 +6,7 @@
 /*   By: tjo <tjo@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 15:25:59 by tjo               #+#    #+#             */
-/*   Updated: 2022/05/19 15:25:39 by tjo              ###   ########.fr       */
+/*   Updated: 2022/05/31 15:34:26 by tjo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,21 +75,19 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (ret);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_custom_strjoin(char *s1, char *buf)
 {
 	char	*ret;
 	size_t	s1_len;
-	size_t	s2_len;
 
-	if (!s1 || !s2)
+	if (!s1 || !buf)
 		return (0);
 	s1_len = ft_strlen(s1);
-	s2_len = ft_strlen(s2);
-	ret = (char *)malloc(sizeof(char) * s1_len + s2_len + 1);
+	ret = (char *)malloc(sizeof(char) * s1_len + BUFFER_SIZE + 1);
 	if (!ret)
 		return (0);
 	ft_memmove(ret, s1, s1_len);
-	ft_memmove(ret + s1_len, s2, s2_len);
-	ret[s1_len + s2_len] = 0;
+	ft_memmove(ret + s1_len, buf, BUFFER_SIZE);
+	ret[s1_len + BUFFER_SIZE] = 0;
 	return (ret);
 }
