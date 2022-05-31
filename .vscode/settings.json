@@ -1,7 +1,11 @@
 {
     "files.associations": {
 		"get_next_line.h": "c",
-		"errno.h": "c"
+		"errno.h": "c",
+		"get_next_line_bonus.h": "c",
+		"utils.h": "c",
+		"locale": "cpp",
+		"istream": "c"
 	},
     "editor.insertSpaces": false,
 	"editor.detectIndentation": false,
