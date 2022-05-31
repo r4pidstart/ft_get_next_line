@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+		"get_next_line.h": "c",
+		"errno.h": "c"
+	},
+    "editor.insertSpaces": false,
+	"editor.detectIndentation": false,
+	"codam-norminette-3.displayErrorName": true,
+	"C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools"
+}
