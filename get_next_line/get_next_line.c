@@ -6,7 +6,7 @@
 /*   By: tjo <tjo@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 15:25:55 by tjo               #+#    #+#             */
-/*   Updated: 2022/06/01 03:48:51 by tjo              ###   ########.fr       */
+/*   Updated: 2022/06/25 16:31:16 by tjo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static char	*delete_fd(int fd, t_list **lst)
 	return (0);
 }
 
-static char	*make_next_string(t_list *node)
+static char	*make_next_string(t_list *node, t_list **lst)
 {
 	char	*ret;
 	char	*tmp;
@@ -81,14 +81,12 @@ static char	*make_next_string(t_list *node)
 		ret = ft_substr(node->string, 0, node->idx + 1);
 		if (!ret)
 			return (0);
-		free(node->string);
-		node->string = 0;
-		node->idx = -1;
+		delete_fd(node->fd, lst);
 	}
 	return (ret);
 }
 
-static char	*read_next_string(t_list *node)
+static char	*read_next_string(t_list *node, t_list **lst)
 {
 	char	buf[BUFFER_SIZE];
 	int		rd_siz;
@@ -102,7 +100,7 @@ static char	*read_next_string(t_list *node)
 		while (node->string[node->idx] && node->string[node->idx + 1] != '\0' \
 		&& node->string[node->idx] != '\n')
 			node->idx++;
-		return (make_next_string(node));
+		return (make_next_string(node, lst));
 	}
 	node->string = ft_custom_strjoin(node->string, buf, rd_siz);
 	if (!node->string)
@@ -112,8 +110,8 @@ static char	*read_next_string(t_list *node)
 	node->string[node->idx] != '\0' && node->string[node->idx] != '\n')
 		node->idx++;
 	if (node->idx == len)
-		return (read_next_string(node));
-	return (make_next_string(node));
+		return (read_next_string(node, lst));
+	return (make_next_string(node, lst));
 }
 
 char	*get_next_line(int fd)
@@ -127,7 +125,7 @@ char	*get_next_line(int fd)
 		return (0);
 	if (read(node->fd, 0, 0) < 0)
 		return (delete_fd(fd, &lst));
-	ret = read_next_string(node);
+	ret = read_next_string(node, &lst);
 	if (ret && ret[0])
 		return (ret);
 	if (ret)
