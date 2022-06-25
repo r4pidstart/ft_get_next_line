@@ -6,7 +6,7 @@
 /*   By: tjo <tjo@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 15:25:55 by tjo               #+#    #+#             */
-/*   Updated: 2022/06/25 16:31:06 by tjo              ###   ########.fr       */
+/*   Updated: 2022/06/25 17:25:29 by tjo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static char	*delete_fd(int fd, t_list **lst)
 	else
 	{	
 		cur = *lst;
-		while (cur->next->fd == fd)
+		while (cur->next->fd != fd)
 			cur = cur->next;
 		tmp = cur->next;
 		cur->next = tmp->next;
