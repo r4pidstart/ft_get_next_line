@@ -6,11 +6,11 @@
 /*   By: tjo <tjo@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 15:25:55 by tjo               #+#    #+#             */
-/*   Updated: 2022/06/25 17:25:29 by tjo              ###   ########.fr       */
+/*   Updated: 2022/07/25 16:48:51 by tjo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"get_next_line.h"
+#include"get_next_line_bonus.h"
 
 static t_list	*find_fd(int fd, t_list **lst)
 {
