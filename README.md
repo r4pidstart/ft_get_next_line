@@ -29,6 +29,8 @@ file descriptor or returning a line from another fd.
 It means that you should be able to call get_next_line() to read from fd 3, then
 fd 4, then 5, then once again 3, once again 4, and so forth.
 
+---
+
 보너스 함수는 기본 함수의 확장이므로, 보너스 함수만 만들었습니다.
 
 이 밑은, 각 함수에 대해서, 간략하게 해당 함수의 코드와 함께 정리한 내용들입니다.
