@@ -220,3 +220,5 @@ static char	*make_next_string(t_list *node, t_list **lst)
 ![스크린샷 2022-07-25 오후 9 42 02](https://user-images.githubusercontent.com/67845112/180779963-94d6c570-3904-4de4-9b99-beb4604278a4.png)
   
 ~~i'm so babo~~
+
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fr4pidstart%2Fft_get_next_line&count_bg=%23000000&title_bg=%23000000&icon=&icon_color=%23000000&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
